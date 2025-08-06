@@ -606,7 +606,7 @@ body {
     html, body {
         overflow-x: auto;
         overflow-y: auto;
-        transform: scale(0.9);
+        transform: scale(0.7);
         transform-origin: top left;
     }
 
