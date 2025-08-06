@@ -117,3 +117,33 @@ document.getElementById("contact-form").addEventListener("submit", function(e) {
             alert("❌ Failed to send message. Error: " + JSON.stringify(error));
         });
 });
+
+// Handle mobile
+function handleOrientationChange() {
+    const isPortrait = window.innerHeight > window.innerWidth;
+    const rotateOverlay = document.getElementById("rotate-device");
+    const siteContent = document.body.children;
+
+    if (isPortrait) {
+        rotateOverlay.style.display = "flex";
+        // Hide all other content
+        for (let child of siteContent) {
+            if (child.id !== "rotate-device") {
+                child.style.display = "none";
+            }
+        }
+    } else {
+        rotateOverlay.style.display = "none";
+        // Show all content again
+        for (let child of siteContent) {
+            if (child.id !== "rotate-device") {
+                child.style.display = "";
+            }
+        }
+    }
+}
+
+// Listen to orientation changes
+window.addEventListener("resize", handleOrientationChange);
+window.addEventListener("orientationchange", handleOrientationChange);
+window.addEventListener("load", handleOrientationChange);
