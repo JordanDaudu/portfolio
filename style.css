@@ -23,6 +23,8 @@
 }
 
 html, body {
+    margin: 0;
+    padding: 0;
     width: 100%;
     overflow-x: auto;
     overflow-y: auto;
@@ -63,13 +65,13 @@ body {
     overflow: hidden;
 }
 
-.wrapper {
-    position: relative;
-    width: 66rem;
-    height: 45rem;
-    padding: 2rem;
-    perspective: 250rem;
-    animation: show-animate 2s forwards;
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .wrapper {
+        transform: scale(0.6);
+        transform-origin: top left;
+        width: 66rem;
+        height: 45rem;
+    }
 }
 
 @keyframes show-animate {
