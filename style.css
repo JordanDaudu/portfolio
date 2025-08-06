@@ -22,42 +22,6 @@
     --box-shadow: 0 0 .6rem rgba(0, 0, 0, .2);
 }
 
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: auto;
-    touch-action: manipulation;
-}
-
-.rotate-device-warning {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    inset: 0;
-    background-color: #111;
-    color: #fff;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.5rem;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 2rem;
-    flex-direction: column;
-}
-
-.rotate-device-warning::before {
-    content: '🔄';
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.rotate-device-warning strong {
-    color: #ffd700;
-    font-weight: 600;
-}
-
 body {
     display: flex;
     justify-content: center;
@@ -65,18 +29,16 @@ body {
     min-height: 100vh;
     background: var(--bg-color);
     color: var(--text-color);
-    overflow-x: auto;
-    overflow-y: auto;
-    touch-action: manipulation;
+    overflow: hidden;
 }
 
-@media screen and (max-width: 768px) and (orientation: landscape) {
-    .wrapper {
-        transform: scale(0.6);
-        transform-origin: top left;
-        width: 66rem;
-        height: 45rem;
-    }
+.wrapper {
+    position: relative;
+    width: 66rem;
+    height: 45rem;
+    padding: 2rem;
+    perspective: 250rem;
+    animation: show-animate 2s forwards;
 }
 
 @keyframes show-animate {
@@ -561,68 +523,3 @@ body {
     transform: scale(1.05);
     cursor: pointer;
 }
-
-/* Mobile support */
-/* ROTATE DEVICE WARNING STYLES */
-.rotate-device-warning {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    inset: 0;
-    background-color: #111;
-    color: #fff;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.5rem;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 2rem;
-}
-
-/* Suggest landscape for small devices */
-@media screen and (max-width: 768px) and (orientation: portrait) {
-    body {
-        overflow: hidden;
-    }
-
-    .rotate-device-warning {
-        display: flex;
-    }
-
-    .main-content {
-        display: none !important;
-        width: max-content;
-        min-width: 100vw;
-    }
-}
-
-@media screen and (max-width: 768px) and (orientation: landscape) {
-    body {
-        overflow-x: auto;
-        overflow-y: auto;
-    }
-
-    .rotate-device-warning {
-        display: none;
-    }
-
-    .main-content {
-        display: block;
-    }
-}
-
-@media screen and (max-width: 768px) and (orientation: landscape) {
-    html, body {
-        overflow-x: auto;
-        overflow-y: auto;
-        transform-origin: top left;
-    }
-
-    .main-content {
-        width: 100vw;
-        min-height: 100vh;
-        padding: 1rem;
-        box-sizing: border-box;
-    }
-}
-
