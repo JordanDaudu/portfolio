@@ -32,22 +32,25 @@ html, body {
 }
 
 .rotate-device-warning {
+    display: none;
     position: fixed;
     z-index: 9999;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(135deg, #1e1e1e, #2c2c2c);
+    inset: 0;
+    background-color: #111;
     color: #fff;
-    display: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.2rem;
     padding: 2rem;
-    box-sizing: border-box;
+    flex-direction: column;
+}
+
+.rotate-device-warning::before {
+    content: '🔄';
+    font-size: 3rem;
+    margin-bottom: 1rem;
 }
 
 .rotate-device-warning strong {
@@ -62,7 +65,9 @@ body {
     min-height: 100vh;
     background: var(--bg-color);
     color: var(--text-color);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: auto;
+    touch-action: manipulation;
 }
 
 @media screen and (max-width: 768px) and (orientation: landscape) {
@@ -586,6 +591,8 @@ body {
 
     .main-content {
         display: none !important;
+        width: max-content;
+        min-width: 100vw;
     }
 }
 
