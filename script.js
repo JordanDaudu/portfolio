@@ -118,24 +118,24 @@ document.getElementById("contact-form").addEventListener("submit", function(e) {
         });
 });
 
-// Mobile drag-to-scroll only
-if (window.innerWidth <= 1024 || window.innerHeight <= 768) { // match your mobile CSS
+// MOBILE DRAG-TO-SCROLL ONLY
+if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
     const wrapper = document.querySelector('.wrapper');
-    let isDown = false;
+    let isDragging = false;
     let startX, startY, scrollLeft, scrollTop;
 
     // --- Mouse support ---
     wrapper.addEventListener('mousedown', (e) => {
-        isDown = true;
+        isDragging = true;
         startX = e.pageX - wrapper.offsetLeft;
         startY = e.pageY - wrapper.offsetTop;
         scrollLeft = wrapper.scrollLeft;
         scrollTop = wrapper.scrollTop;
     });
-    wrapper.addEventListener('mouseleave', () => isDown = false);
-    wrapper.addEventListener('mouseup', () => isDown = false);
+    wrapper.addEventListener('mouseleave', () => isDragging = false);
+    wrapper.addEventListener('mouseup', () => isDragging = false);
     wrapper.addEventListener('mousemove', (e) => {
-        if(!isDown) return;
+        if(!isDragging) return;
         e.preventDefault();
         const x = e.pageX - wrapper.offsetLeft;
         const y = e.pageY - wrapper.offsetTop;
@@ -145,20 +145,31 @@ if (window.innerWidth <= 1024 || window.innerHeight <= 768) { // match your mobi
 
     // --- Touch support ---
     wrapper.addEventListener('touchstart', (e) => {
-        isDown = true;
-        const touch = e.touches[0];
-        startX = touch.pageX - wrapper.offsetLeft;
-        startY = touch.pageY - wrapper.offsetTop;
-        scrollLeft = wrapper.scrollLeft;
-        scrollTop = wrapper.scrollTop;
+        if (e.touches.length === 1) { // single touch → drag
+            isDragging = true;
+            const touch = e.touches[0];
+            startX = touch.pageX - wrapper.offsetLeft;
+            startY = touch.pageY - wrapper.offsetTop;
+            scrollLeft = wrapper.scrollLeft;
+            scrollTop = wrapper.scrollTop;
+        }
+        // if e.touches.length > 1 → pinch, do nothing
     });
-    wrapper.addEventListener('touchend', () => isDown = false);
+
     wrapper.addEventListener('touchmove', (e) => {
-        if(!isDown) return;
-        const touch = e.touches[0];
-        const x = touch.pageX - wrapper.offsetLeft;
-        const y = touch.pageY - wrapper.offsetTop;
-        wrapper.scrollLeft = scrollLeft - (x - startX);
-        wrapper.scrollTop = scrollTop - (y - startY);
+        if (e.touches.length === 1 && isDragging) { // drag only if one finger
+            const touch = e.touches[0];
+            const x = touch.pageX - wrapper.offsetLeft;
+            const y = touch.pageY - wrapper.offsetTop;
+            wrapper.scrollLeft = scrollLeft - (x - startX);
+            wrapper.scrollTop = scrollTop - (y - startY);
+        } else if (e.touches.length > 1) {
+            // multi-touch: allow pinch/zoom naturally
+            return;
+        }
+    });
+
+    wrapper.addEventListener('touchend', (e) => {
+        if (e.touches.length === 0) isDragging = false; // reset when all fingers lifted
     });
 }
