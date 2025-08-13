@@ -118,25 +118,25 @@ document.getElementById("contact-form").addEventListener("submit", function(e) {
         });
 });
 
-// MOBILE DRAG-TO-SCROLL ONLY
-if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
-    const wrapper = document.querySelector('.wrapper');
-    let isDragging = false;
-    let startX, startY, scrollLeft, scrollTop;
-
-    wrapper.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) {
-            isDragging = true;
-            const touch = e.touches[0];
-            startX = touch.pageX;
-            startY = touch.pageY;
-            scrollLeft = wrapper.scrollLeft;
-            scrollTop = wrapper.scrollTop;
-        }
-    });
-
-    wrapper.addEventListener('touchend', () => {
-        isDragging = false;
-    });
-}
+// // MOBILE DRAG-TO-SCROLL ONLY
+// if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
+//     const wrapper = document.querySelector('.wrapper');
+//     let isDragging = false;
+//     let startX, startY, scrollLeft, scrollTop;
+//
+//     wrapper.addEventListener('touchstart', (e) => {
+//         if (e.touches.length === 1) {
+//             isDragging = true;
+//             const touch = e.touches[0];
+//             startX = touch.pageX;
+//             startY = touch.pageY;
+//             scrollLeft = wrapper.scrollLeft;
+//             scrollTop = wrapper.scrollTop;
+//         }
+//     });
+//
+//     wrapper.addEventListener('touchend', () => {
+//         isDragging = false;
+//     });
+// }
 
