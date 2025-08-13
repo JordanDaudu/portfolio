@@ -145,34 +145,31 @@ if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
 
     // --- Touch support ---
     wrapper.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) { // single touch → drag
+        if (e.touches.length === 1) { // single-finger drag
             isDragging = true;
             const touch = e.touches[0];
-            startX = touch.pageX - wrapper.offsetLeft;
-            startY = touch.pageY - wrapper.offsetTop;
+            startX = touch.pageX + wrapper.scrollLeft;
+            startY = touch.pageY + wrapper.scrollTop;
             scrollLeft = wrapper.scrollLeft;
             scrollTop = wrapper.scrollTop;
-        }
-        else {
+        } else {
             isDragging = false; // multi-touch → pinch/zoom
         }
     });
 
     wrapper.addEventListener('touchmove', (e) => {
-        if (e.touches.length === 1 && isDragging) {
+        if (isDragging && e.touches.length === 1) {
             const touch = e.touches[0];
-            const x = touch.pageX - wrapper.offsetLeft;
-            const y = touch.pageY - wrapper.offsetTop;
+            const x = touch.pageX;
+            const y = touch.pageY;
             wrapper.scrollLeft = scrollLeft - (x - startX);
             wrapper.scrollTop = scrollTop - (y - startY);
-            e.preventDefault(); // prevent scrolling only for single-finger drag
+            e.preventDefault(); // only prevent scrolling for single-finger drag
         }
-        else {
-            // multi-touch → do NOT preventDefault, allow pinch/zoom
-        }
+        // multi-touch → do nothing, let browser handle pinch/zoom
     });
 
     wrapper.addEventListener('touchend', (e) => {
-        if (e.touches.length === 0) isDragging = false; // reset
+        if (e.touches.length === 0) isDragging = false;
     });
 }

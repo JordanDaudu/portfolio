@@ -40,6 +40,7 @@ body {
     max-height: 45rem;
     padding: 2rem;
     perspective: 250rem;
+    touch-action: pan-x pan-y; /* allow browser gestures like pinch/zoom and scroll */
     animation: show-animate 2s forwards;
 }
 
