@@ -40,7 +40,6 @@ body {
     max-height: 45rem;
     padding: 2rem;
     perspective: 250rem;
-    touch-action: none;
     animation: show-animate 2s forwards;
 }
 
@@ -539,6 +538,6 @@ body {
         height: 900px;           /* fixed desktop height */
         margin: 2rem auto;       /* center wrapper in scrollable body */
         perspective: 250rem;     /* keep your 3D perspective */
-        touch-action: pan-x pan-y; /* allow panning on touch devices */
+        touch-action: none
     }
 }
