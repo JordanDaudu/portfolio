@@ -538,5 +538,7 @@ body {
         height: 900px;           /* fixed desktop height */
         margin: 2rem auto;       /* center wrapper in scrollable body */
         perspective: 250rem;     /* keep your 3D perspective */
+        overflow: auto;          /* or scroll */
+        -webkit-overflow-scrolling: touch; /* smooth scrolling */
     }
 }
