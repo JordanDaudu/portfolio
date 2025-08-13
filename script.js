@@ -118,18 +118,15 @@ document.getElementById("contact-form").addEventListener("submit", function(e) {
         });
 });
 
-// MOBILE DRAG-TO-SCROLL AND PINCH-TO-ZOOM
+// MOBILE DRAG-TO-SCROLL WITH MOMENTUM
 if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
     const wrapper = document.querySelector('.wrapper');
     let isDragging = false;
-    let isPinching = false;
     let startX, startY, scrollLeft, scrollTop;
-    let initialDistance = 0;
-    let scale = 1;
-    let originX = 0;
-    let originY = 0;
-
-    wrapper.style.transformOrigin = "0 0"; // set default origin
+    let lastX = 0, lastY = 0;
+    let velocityX = 0, velocityY = 0;
+    let lastTime = 0;
+    let momentumFrame;
 
     wrapper.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
@@ -139,20 +136,10 @@ if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
             startY = touch.pageY;
             scrollLeft = wrapper.scrollLeft;
             scrollTop = wrapper.scrollTop;
-        } else if (e.touches.length === 2) {
-            isDragging = false;
-            isPinching = true;
-            initialDistance = getDistance(e.touches[0], e.touches[1]);
-
-            // Calculate midpoint for zoom origin
-            originX = (e.touches[0].pageX + e.touches[1].pageX) / 2;
-            originY = (e.touches[0].pageY + e.touches[1].pageY) / 2;
-
-            // Convert to percentage for transform-origin
-            const rect = wrapper.getBoundingClientRect();
-            const percentX = ((originX - rect.left) / rect.width) * 100;
-            const percentY = ((originY - rect.top) / rect.height) * 100;
-            wrapper.style.transformOrigin = `${percentX}% ${percentY}%`;
+            lastX = startX;
+            lastY = startY;
+            lastTime = Date.now();
+            cancelMomentum(); // stop any ongoing momentum
         }
     });
 
@@ -161,29 +148,50 @@ if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
             const touch = e.touches[0];
             const x = touch.pageX;
             const y = touch.pageY;
+
+            const dx = x - lastX;
+            const dy = y - lastY;
+            const dt = Date.now() - lastTime;
+
+            velocityX = dx / dt;
+            velocityY = dy / dt;
+
             wrapper.scrollLeft = scrollLeft - (x - startX);
             wrapper.scrollTop = scrollTop - (y - startY);
-            e.preventDefault();
-        } else if (isPinching && e.touches.length === 2) {
-            const newDistance = getDistance(e.touches[0], e.touches[1]);
-            const zoomFactor = newDistance / initialDistance;
-            scale = Math.min(Math.max(zoomFactor, 0.5), 3); // clamp zoom
-            wrapper.style.transform = `scale(${scale})`;
+
+            lastX = x;
+            lastY = y;
+            lastTime = Date.now();
+
             e.preventDefault();
         }
     });
 
-    wrapper.addEventListener('touchend', (e) => {
-        if (e.touches.length === 0) {
-            isDragging = false;
-            isPinching = false;
-        }
+    wrapper.addEventListener('touchend', () => {
+        isDragging = false;
+        applyMomentum();
     });
 
-    function getDistance(touch1, touch2) {
-        const dx = touch2.pageX - touch1.pageX;
-        const dy = touch2.pageY - touch1.pageY;
-        return Math.sqrt(dx * dx + dy * dy);
+    function applyMomentum() {
+        const friction = 0.95;
+        const step = () => {
+            velocityX *= friction;
+            velocityY *= friction;
+
+            wrapper.scrollLeft -= velocityX * 20;
+            wrapper.scrollTop -= velocityY * 20;
+
+            if (Math.abs(velocityX) > 0.1 || Math.abs(velocityY) > 0.1) {
+                momentumFrame = requestAnimationFrame(step);
+            }
+        };
+        step();
+    }
+
+    function cancelMomentum() {
+        if (momentumFrame) {
+            cancelAnimationFrame(momentumFrame);
+            momentumFrame = null;
+        }
     }
 }
-
