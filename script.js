@@ -135,17 +135,6 @@ if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
         }
     });
 
-    wrapper.addEventListener('touchmove', (e) => {
-        if (isDragging && e.touches.length === 1) {
-            const touch = e.touches[0];
-            const x = touch.pageX;
-            const y = touch.pageY;
-            wrapper.scrollLeft = scrollLeft - (x - startX);
-            wrapper.scrollTop = scrollTop - (y - startY);
-            e.preventDefault(); // prevent native scroll for smoother drag
-        }
-    });
-
     wrapper.addEventListener('touchend', () => {
         isDragging = false;
     });
