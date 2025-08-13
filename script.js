@@ -118,15 +118,11 @@ document.getElementById("contact-form").addEventListener("submit", function(e) {
         });
 });
 
-// MOBILE DRAG-TO-SCROLL WITH MOMENTUM
+// MOBILE DRAG-TO-SCROLL ONLY
 if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
     const wrapper = document.querySelector('.wrapper');
     let isDragging = false;
     let startX, startY, scrollLeft, scrollTop;
-    let lastX = 0, lastY = 0;
-    let velocityX = 0, velocityY = 0;
-    let lastTime = 0;
-    let momentumFrame;
 
     wrapper.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
@@ -136,10 +132,6 @@ if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
             startY = touch.pageY;
             scrollLeft = wrapper.scrollLeft;
             scrollTop = wrapper.scrollTop;
-            lastX = startX;
-            lastY = startY;
-            lastTime = Date.now();
-            cancelMomentum(); // stop any ongoing momentum
         }
     });
 
@@ -148,50 +140,14 @@ if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
             const touch = e.touches[0];
             const x = touch.pageX;
             const y = touch.pageY;
-
-            const dx = x - lastX;
-            const dy = y - lastY;
-            const dt = Date.now() - lastTime;
-
-            velocityX = dx / dt;
-            velocityY = dy / dt;
-
             wrapper.scrollLeft = scrollLeft - (x - startX);
             wrapper.scrollTop = scrollTop - (y - startY);
-
-            lastX = x;
-            lastY = y;
-            lastTime = Date.now();
-
-            e.preventDefault();
+            e.preventDefault(); // prevent native scroll for smoother drag
         }
     });
 
     wrapper.addEventListener('touchend', () => {
         isDragging = false;
-        applyMomentum();
     });
-
-    function applyMomentum() {
-        const friction = 0.95;
-        const step = () => {
-            velocityX *= friction;
-            velocityY *= friction;
-
-            wrapper.scrollLeft -= velocityX * 20;
-            wrapper.scrollTop -= velocityY * 20;
-
-            if (Math.abs(velocityX) > 0.1 || Math.abs(velocityY) > 0.1) {
-                momentumFrame = requestAnimationFrame(step);
-            }
-        };
-        step();
-    }
-
-    function cancelMomentum() {
-        if (momentumFrame) {
-            cancelAnimationFrame(momentumFrame);
-            momentumFrame = null;
-        }
-    }
 }
+
