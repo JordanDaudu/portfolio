@@ -153,23 +153,26 @@ if (window.innerWidth <= 1024 || window.innerHeight <= 768) {
             scrollLeft = wrapper.scrollLeft;
             scrollTop = wrapper.scrollTop;
         }
-        // if e.touches.length > 1 → pinch, do nothing
+        else {
+            isDragging = false; // multi-touch → pinch/zoom
+        }
     });
 
     wrapper.addEventListener('touchmove', (e) => {
-        if (e.touches.length === 1 && isDragging) { // drag only if one finger
+        if (e.touches.length === 1 && isDragging) {
             const touch = e.touches[0];
             const x = touch.pageX - wrapper.offsetLeft;
             const y = touch.pageY - wrapper.offsetTop;
             wrapper.scrollLeft = scrollLeft - (x - startX);
             wrapper.scrollTop = scrollTop - (y - startY);
-        } else if (e.touches.length > 1) {
-            // multi-touch: allow pinch/zoom naturally
-            return;
+            e.preventDefault(); // prevent scrolling only for single-finger drag
+        }
+        else {
+            // multi-touch → do NOT preventDefault, allow pinch/zoom
         }
     });
 
     wrapper.addEventListener('touchend', (e) => {
-        if (e.touches.length === 0) isDragging = false; // reset when all fingers lifted
+        if (e.touches.length === 0) isDragging = false; // reset
     });
 }
