@@ -34,8 +34,10 @@ body {
 
 .wrapper {
     position: relative;
-    width: 66rem;
-    height: 45rem;
+    width: 95vw;
+    max-width: 66rem;
+    height: 90vh;
+    max-height: 45rem;
     padding: 2rem;
     perspective: 250rem;
     animation: show-animate 2s forwards;
@@ -522,4 +524,20 @@ body {
     box-shadow: var(--box-shadow);
     transform: scale(1.05);
     cursor: pointer;
+}
+
+/* Mobile-only adjustments: portrait or landscape */
+@media (max-width: 1024px), (max-height: 768px) {
+    body {
+        display: block;          /* allow scrolling */
+        overflow: auto;          /* enable vertical/horizontal scroll */
+    }
+
+    .wrapper {
+        width: 1200px;           /* fixed desktop width */
+        height: 900px;           /* fixed desktop height */
+        margin: 2rem auto;       /* center wrapper in scrollable body */
+        perspective: 250rem;     /* keep your 3D perspective */
+        touch-action: pan-x pan-y; /* allow panning on touch devices */
+    }
 }

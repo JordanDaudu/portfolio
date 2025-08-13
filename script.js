@@ -117,3 +117,48 @@ document.getElementById("contact-form").addEventListener("submit", function(e) {
             alert("❌ Failed to send message. Error: " + JSON.stringify(error));
         });
 });
+
+// Mobile drag-to-scroll only
+if (window.innerWidth <= 1024 || window.innerHeight <= 768) { // match your mobile CSS
+    const wrapper = document.querySelector('.wrapper');
+    let isDown = false;
+    let startX, startY, scrollLeft, scrollTop;
+
+    // --- Mouse support ---
+    wrapper.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - wrapper.offsetLeft;
+        startY = e.pageY - wrapper.offsetTop;
+        scrollLeft = wrapper.scrollLeft;
+        scrollTop = wrapper.scrollTop;
+    });
+    wrapper.addEventListener('mouseleave', () => isDown = false);
+    wrapper.addEventListener('mouseup', () => isDown = false);
+    wrapper.addEventListener('mousemove', (e) => {
+        if(!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - wrapper.offsetLeft;
+        const y = e.pageY - wrapper.offsetTop;
+        wrapper.scrollLeft = scrollLeft - (x - startX);
+        wrapper.scrollTop = scrollTop - (y - startY);
+    });
+
+    // --- Touch support ---
+    wrapper.addEventListener('touchstart', (e) => {
+        isDown = true;
+        const touch = e.touches[0];
+        startX = touch.pageX - wrapper.offsetLeft;
+        startY = touch.pageY - wrapper.offsetTop;
+        scrollLeft = wrapper.scrollLeft;
+        scrollTop = wrapper.scrollTop;
+    });
+    wrapper.addEventListener('touchend', () => isDown = false);
+    wrapper.addEventListener('touchmove', (e) => {
+        if(!isDown) return;
+        const touch = e.touches[0];
+        const x = touch.pageX - wrapper.offsetLeft;
+        const y = touch.pageY - wrapper.offsetTop;
+        wrapper.scrollLeft = scrollLeft - (x - startX);
+        wrapper.scrollTop = scrollTop - (y - startY);
+    });
+}
